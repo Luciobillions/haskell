@@ -1,0 +1,32 @@
+Recopilar informacion que me sirve, del libro="aprendehaskell.es"
+
+🌀Recursion:"La recursion es una forma de definir funciones tales que dichas funciones
+se utiliza en la propia defincion de la funcion"
+
+Como en el lenguaje funcional, no hay ciclos, se recurre a la recursion.
+En cual se usa un 'caso base', estos caso base son elementos no recursivos
+si solo tenemos casos bases en una definicion se denomina 'condicion limite'
+
+Maximum: funcion 'maximum' toma una lista de cosas que pueden ser ordenadas, instancias
+de tipo 'Ord' y devuelve el mas grande. Como hacerlo de forma recursiva 
+
+'Caso Base' si de una lista unitaria hay un solo elemento, entonces es el mas grande 
+
+//maxium nombre de la funcion, (Ord a) restriccion de tipo, a debe ser ordenable operaciones < >,
+ [a] -> a, toma una lista de elementos de tipo a y devuelve un elemento de tipo a
+maximum' :: (Ord a) => [a] -> a
+
+//caso en que la lista este vacia
+maximum' [] = error "Máximo de una lista vacía"
+
+//caso base, si la lista tiene un solo elemento que devuelva ese
+maximum' [x] = x
+
+//(x:xs) divide la lista en x primer elemento (cabeza), xs resto de la lista(cola)
+//maxTail variable local definida por where, calculando recursivamente el maximo de xs
+descompiendo la lista hasta llegar el caso base
+// otherwise=true, cuando falle  x > maxTail = x, osea es la salida por defecto cuando falla, primera condicion
+maximum' (x:xs)
+    | x > maxTail = x
+    | otherwise   = maxTail
+    where maxTail = maximum' xs
