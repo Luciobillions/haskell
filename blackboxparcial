@@ -1,0 +1,135 @@
+public class PilaEnlazada<T> implements Pila<T> {
+    private Nodo<T> cima;
+    private int tamano;
+    
+    public boolean esVacia() { return this.tamano == 0; }
+    
+    public void apilar(T elemento) {
+        Nodo<T> nuevo = new Nodo<>(elemento);
+        nuevo.setSiguiente(this.cima);
+        this.cima = nuevo;
+        this.tamano++;
+    }
+    
+    public T desapilar() throws TADException {
+        if (this.esVacia()) throw new TADException("Pila vacía");
+        T resultado = cima.getInfo();  // Obtener info de cima
+        this.cima = cima.getSiguiente();    // Actualizar cima
+        this.tamano--;
+        return resultado;
+    }
+    
+    // ... otros métodos
+}
+
+
+public class ColaEstatica<T> implements Cola<T> {
+    private T[] elementos;
+    private int frente, fin, tamano;
+    private static final int CAPACIDAD = 10;
+    
+    @SuppressWarnings("unchecked")
+    public ColaEstatica() {
+        this.elementos = (T[]) new Object[CAPACIDAD];
+        this.frente = 0;
+        this.fin = -1;
+        this.tamano = 0;
+    }
+    
+    public boolean esVacia() { return this.tamano == 0; }
+    
+    public void encolar(T elemento) throws TADException {
+        if (this.tamano == CAPACIDAD) throw new TADException("Cola llena");
+        this.fin = (this.fin + 1) % CAPACIDAD;
+        this.elementos[this.fin] = elemento;
+        this.tamano++;
+    }
+    
+    public T desencolar() throws TADException {
+        if (this.esVacia()) throw new TADException("Cola vacía");
+        T resultado = this.elementos[this.frente];
+        this.elementos[this.frente] = null;  // Limpieza opcional
+        this.frente = (this.frente + 1) % CAPACIDAD;
+        this.tamano--;
+        return resultado;
+    }
+
+    public boolean esLlena(){
+        this.tamano == CAPACIDAD
+    }
+
+    el metodo desencolar maneja correctamente la circularidad del arreglo utilizando % 
+    esta cumpliendo el FIFO, el primer elemento en entrar es el primer elemento en salir
+    ventaja sobre dinamica, acceso constante a encolar\desencolar sin mover elementos, a diferecia
+    basada en listas donde puede haber overhead de memoria o de punteros
+
+
+    (c) [2 puntos] Tipos de expresiones y currificación.
+Determina el tipo resultante de las siguientes expresiones en Haskell (usa notación de tipos como Int -> Bool o [Char]). Justifica brevemente cada una, mencionando si involucra currificación.
+
+    ((+) 5 . (* 2)) 3
+        Tipo: Int
+        Justificación: primero hace * 2 3 prefija, que esto da 6, despues se le suma 5 6+5=11
+
+    filter ((> 0) . fst) [(1, 'a'), (-2, 'b'), (3, 'c')]
+        Tipo: lista de tuplas
+        Justificación:composicion de funciones (¿Currificación en filter o fst?)
+        si quitamos el filter, iba a devolver un true o false
+
+    (\x y -> x + y) 10
+        Tipo: funcion 
+        Justificación: ________________ (Ejemplo de currificación explícita).
+
+
+(d) [3 puntos] Recursión en funciones.
+Se quiere definir una función recursiva sumaPares que sume solo los números pares de una lista de enteros, usando recursión de cola (tail recursion) para eficiencia. Ejemplo:
+> sumaPares [1,2,3,4,5]
+6 (2 + 4).
+
+    Completa el perfil de tipo: sumaPares :: Num a => [a] -> a
+    Implementa la función usando un acumulador para recursión de cola. Reemplaza undefined en el siguiente esqueleto:
+
+    sumaPares xs = sum (filter even xs) --even es para el numero par, que devuelve true o false
+
+    sumaPares :: [Int] -> Int
+
+sumaPares xs = sumaParesAux xs 0
+
+    where
+
+        sumaParesAux [] acc = acc-- Caso base
+
+        sumaParesAux (x:xs) acc = 
+
+            if even x then sumaParesAux xs (acc + x)  -- Si par, suma y recursiona
+
+            else sumaParesAux xs acc -- Si impar, recursiona sin sumar
+
+
+
+En Programación OO, ¿cuál es la diferencia principal entre herencia e interfaces en Java? Proporciona un ejemplo simple de código para cada uno (1 línea cada uno).
+En TADS, describe brevemente (2-3 líneas) cómo implementarías una Lista con memoria estática (arreglo) versus dinámica (enlazada), destacando pros/contras en términos de inserción en el medio.
+
+En programacion orientada objetos:
+Para la herencia, primero debe haber una clase padre, esta herencia aparece en la clase hija, donde esta hereda
+    su comportamiento y atributos 
+
+con interfaces, es un tipo de contrato de metodos que la clase que la implementa debe cumplir, sin propocionar 
+implementacion salvo default o static
+
+herencia en una linea de codigo
+class perro extends Animal {}
+Perro hereda atributos de Animal
+
+interfaz en una linea de codigo
+class Perro implements Mascota{}
+Perro se compromente a implementar los metodos definidos en la interfaz (Mascota)
+
+
+Lista estatica(arreglo)
+Se usa un arreglo de tamano fijo, MAX_CAPACIDAD, Para insertar en el medio, hay que desplazar los elementos posteriores
+lo que es costoso, la ventaja viene por el rapido acceso por indice
+
+Lista dinamica(enlazada)
+Cada nodo apunta al siguiente. Insertar en el medio es simple y rapido, si se tiene el nodo previo,
+porque solo se cambian punteros, la desventaja por indice lento, mayor consumo de memorias
