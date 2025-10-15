@@ -55,9 +55,9 @@ hd(1:linf)
  
 -}
 
-f :: Int -> Int 
+f :: Int -> Int -> Int 
 f x 0 = x
-f x (n+1) = cuadrado (f x n)
+f x (n+1) = cuadrado (f x n) -- esto en haskell no anda porque no se puede hacer (n+1), seria (n-1)
 
 {-
 f 2 (2+1)
